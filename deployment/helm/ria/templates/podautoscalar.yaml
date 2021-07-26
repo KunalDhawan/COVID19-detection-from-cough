@@ -1,0 +1,24 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "ria.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "ria.labels" . | indent 4 }}
+spec:
+  minReplicas: {{ .Values.deploymentStrategy.autoScaler.minReplicas }}
+  maxReplicas: {{ .Values.deploymentStrategy.autoScaler.maxReplicas }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "ria.fullname" . }}
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.deploymentStrategy.autoScaler.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.deploymentStrategy.autoScaler.targetCPUUtilizationPercentage }}
+---

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "service.configmap.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "ria.labels" . | indent 4 }}
+data:
+  LOG_LEVEL: {{ quote .Values.app.logLevel }}
+  HTTP_PORT: {{ quote .Values.app.httpPort }}
+  TMPFS_LOCATION: {{ quote .Values.app.tmpfsLocation }}
+  MAX_WORKERS: {{ quote .Values.app.maxWorker }}
+---

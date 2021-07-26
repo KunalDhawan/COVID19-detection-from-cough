@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ria.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "ria.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.deploymentStrategy.replicaCount }}
+  type: {{ .Values.deploymentStrategy.startegy }}
+  rollingUpdate:
+    maxSurge: {{ .Values.deploymentStrategy.rollingUpdate.maxSurge }}
+    maxUnavailable: {{ .Values.deploymentStrategy.rollingUpdate.maxUnavailable }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "ria.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "ria.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        rollme: {{ randAlphaNum 5 | quote }}
+        prometheus.io/scrape: "{{ .Values.prometheus.enabled }}"
+        prometheus.io/port: "{{ .Values.prometheus.port }}"
+        prometheus.io/path: "{{ .Values.prometheus.path }}"
+    spec:
+      imagePullSecrets:
+        - name: {{ include "service.registry.name" . }}
+      terminationGracePeriodSeconds: {{ .Values.deploymentStrategy.terminationGracePeriodSeconds }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ include "service.image.name" . }}"
+          imagePullPolicy: {{ .Values.docker.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: {{ template "service.configmap.fullname" . }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.app.httpPort }}
+              protocol: TCP
+            - name: http-prometheus
+              containerPort: {{ .Values.prometheus.port }}
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /tmp/app-server
+              name: service-tmpfs
+      volumes:
+        - name: service-tmpfs
+          emptyDir:
+            medium: Memory
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

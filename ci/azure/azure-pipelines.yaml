@@ -1,0 +1,45 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- group: 'Build Configuration Group'
+
+steps:
+- task: TwineAuthenticate@1
+  displayName: 'Twine Authenticate'
+  inputs:
+    artifactFeed: $(PYPI_FEED)
+
+- task: PipAuthenticate@1
+  displayName: 'Authenticate PyPi'
+  inputs:
+    artifactFeeds: $(PYPI_FEED)
+    onlyAddExtraIndex: true
+
+# - script: make environment
+#   displayName: 'Install required dependencies'
+
+# - script: make coverage
+#   displayName: 'Run unit tests with coverage'
+
+- script: make package
+  displayName: 'Package code'
+  env:
+    DOCKER_REPO: $(DOCKER_REPO)
+    DOCKER_USERNAME: $(DOCKER_USERNAME)
+    DOCKER_PASSWORD: $(DOCKER_PASSWORD)
+
+- script: make publish
+  displayName: 'Publish packaged code'
+  env:
+    DOCKER_REPO: $(DOCKER_REPO)
+    DOCKER_USERNAME: $(DOCKER_USERNAME)
+    DOCKER_PASSWORD: $(DOCKER_PASSWORD)
