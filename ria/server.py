@@ -23,10 +23,6 @@ from .ria_model import RIAModel
 from .validation_model import ValidationModel
 from .visualization import OutputVisualiztion
 
-
-#from .app_config import STORAGE_KOSH_BASE_URI as kosh_base_uri
-from jio.toolkit.core.storage.kosh_client import KoshClient
-
 app = FastAPI()
 log = logging.getLogger("app")
 
@@ -44,7 +40,7 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"version": "0.1","name":"Jio Health AI Respiratory Illness Assessment REST API"}
+    return {"version": "0.1","name":"Respiratory Illness Assessment REST API"}
 
 
 @app.get("/health")
