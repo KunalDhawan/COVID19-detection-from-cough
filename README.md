@@ -23,4 +23,4 @@ How to use:
     * make environment
     * make run
 ```
-This will open the [webpage](ria/static/index.html) in your local machine at 0.0.0.0 (port:5000)
+This will open the [webpage](ria/static/index.html) in your local machine at 0.0.0.0 on port 5000 (http://0.0.0.0:5000/index.html).
