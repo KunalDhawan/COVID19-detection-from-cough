@@ -6,6 +6,12 @@ This project provides a simple webpage for end users to interact with, upload th
 
 A few screenshots of the tool in action- 
 
+![Tool screenshot 1](figures/ria_html_snap_1.png "Screenshot of the tool")
+
+![Tool screenshot 2](figures/ria_html_snap2.png "Screenshot of the tool")
+
+![Tool screenshot 3](figures/ria_vizualisation_demo.png "Interactive vizualisation")
+
 A working demo of the project can be accessed here - 
 
 Note - This is a simple test project and in no way a candidate to replace the current testing paradigm. This can help in the initial screening phase if there are only a limited number of covid-19 test kits available, but hasn't been tested on a large enough scale to determine it's efficacy.
