@@ -12,8 +12,7 @@ A few screenshots of the tool in action-
 
 ![Tool screenshot 3](figures/ria_vizualisation_demo.png "Interactive vizualisation")
 
-A working demo of the project can be accessed here - 
-![Video explanation](figures/ria_project_explanation_video.mp4 "Project Demonstration")
+A working demo of the project can be accessed here - [Video explanation](https://youtu.be/pgjenwWmvJ0)
 
 Note - This is a simple test project and in no way a candidate to replace the current testing paradigm. This can help in the initial screening phase if there are only a limited number of covid-19 test kits available, but hasn't been tested on a large enough scale to determine it's efficacy.
 
