@@ -9,7 +9,6 @@ python_speech_features
 statistics
 scipy
 joblib
-jio-toolkit
 scikit-learn==0.22.1
 requests
 aiofiles
